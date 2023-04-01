@@ -1,3 +1,4 @@
-# Build and test an application using Cypress
+# cypress tutorial
+E2E test 도구인 cypress를 공부하고자 합니다.
 
-This repository is the starting point for an official Cypress tutorial. We encourage you to clone this repo and follow along.
+* 23.04.01 cypress todo example clone 및 git 환경 세팅
