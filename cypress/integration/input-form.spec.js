@@ -18,4 +18,38 @@ describe("Input form", () => {
     // type를 한 뒤에, input value에 해당 내용이 있는 지 확인
     cy.get(".new-todo").type(typeTest).should("have.value", typeTest);
   });
+
+  // group or organize test
+  context("Form submission", () => {
+    beforeEach(() => {
+      cy.server(); // start server
+    });
+
+    it("Adds a new todo on submit", () => {
+      const itemText = "you can do everything";
+      cy.route("POST", "/api/todos", {
+        name: itemText,
+        id: 1,
+        isComplete: false,
+      }); // handle request
+      cy.get(".new-todo")
+        .type(itemText)
+        .type("{enter}")
+        .should("have.value", "");
+      cy.get(".todo-list li").should("have.length", 1).and("contain", itemText);
+    });
+
+    it("Show error on failed submission", () => {
+      cy.route({
+        url: "/api/todos",
+        method: "POST",
+        status: 500,
+        response: {},
+      }); // 실패케이스라 옵션만 작성
+
+      cy.get(".new-todo").type("test{enter}"); // test를 타이핑 하고 엔터를 눌렀다.
+      cy.get(".todo-list li").should("not.exist"); // 존재하지 않는다면
+      cy.get(".error").should("be.visible"); // 지우자
+    });
+  });
 });
